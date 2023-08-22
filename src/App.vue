@@ -1,9 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
-  	<div>
-		<h2>itestes</h2>
-	</div>
+	<router-view></router-view>
 </template>
-
-<script scoped></script>
