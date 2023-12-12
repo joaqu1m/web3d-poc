@@ -1,4 +1,6 @@
 "use client";
+import fragmentShader from "@/app/webgl/_shaders/fragmentShader.glsl";
+import vertexShader from "@/app/webgl/_shaders/vertexShader.glsl";
 import { useEffect, useRef } from "react";
 
 export default function Webgl() {
@@ -11,11 +13,7 @@ export default function Webgl() {
 
     if (glcanvas === null) return;
     const canvas = glcanvas.current;
-    if (canvas === null) {
-      alert("div não encontrada");
-      return;
-    }
-
+    if (canvas === null) return;
     const ctx = canvas.getContext("webgl");
 
     if (ctx === null) {
@@ -24,6 +22,7 @@ export default function Webgl() {
     }
 
     const vertices = [0, 0, -1, -1, 1, 0];
+    const vertices2 = [0.5, 0, 1, -1, 1, 0];
 
     const vertex_buffer = ctx.createBuffer();
     ctx.bindBuffer(ctx.ARRAY_BUFFER, vertex_buffer);
@@ -34,24 +33,25 @@ export default function Webgl() {
     );
     ctx.bindBuffer(ctx.ARRAY_BUFFER, null);
 
-    const vertCode =
-      "attribute vec2 coordinates;" +
-      "void main(void) {" +
-      " gl_Position = vec4(coordinates,0.0, 2.0);" +
-      "}";
+    const vertex_buffer2 = ctx.createBuffer();
+    ctx.bindBuffer(ctx.ARRAY_BUFFER, vertex_buffer2);
+    ctx.bufferData(
+      ctx.ARRAY_BUFFER,
+      new Float32Array(vertices2),
+      ctx.STATIC_DRAW
+    );
+    ctx.bindBuffer(ctx.ARRAY_BUFFER, null);
 
     const vertShader = ctx.createShader(ctx.VERTEX_SHADER);
     if (vertShader === null) return;
 
-    ctx.shaderSource(vertShader, vertCode);
+    ctx.shaderSource(vertShader, vertexShader);
     ctx.compileShader(vertShader);
 
-    const fragCode =
-      "void main(void) {gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);}";
     const fragShader = ctx.createShader(ctx.FRAGMENT_SHADER);
     if (fragShader === null) return;
 
-    ctx.shaderSource(fragShader, fragCode);
+    ctx.shaderSource(fragShader, fragmentShader);
     ctx.compileShader(fragShader);
 
     const shaderProgram = ctx.createProgram();
@@ -73,6 +73,12 @@ export default function Webgl() {
     ctx.viewport(0, 0, canvas.width, canvas.height);
 
     ctx.drawArrays(ctx.TRIANGLES, 0, 3);
+
+    ctx.bindBuffer(ctx.ARRAY_BUFFER, vertex_buffer2);
+    const coord2 = ctx.getAttribLocation(shaderProgram, "coordinates");
+    ctx.vertexAttribPointer(coord2, 2, ctx.FLOAT, false, 0, 0);
+    ctx.enableVertexAttribArray(coord2);
+    ctx.drawArrays(ctx.TRIANGLES, 0, 3);
   };
 
   useEffect(() => {
@@ -84,8 +90,8 @@ export default function Webgl() {
       <canvas
         ref={glcanvas}
         width="1280"
-        height="960"
-        className="w-[1280px] h-[960px]"
+        height="600"
+        className="w-[1280px] h-[600px]"
       />
     </div>
   );
