@@ -2,33 +2,33 @@ import fragmentShader from "@/app/webgl/_shaders/fragmentShader.glsl";
 import vertexShader from "@/app/webgl/_shaders/vertexShader.glsl";
 
 export const bgInit = (
-  ctx: WebGLRenderingContext,
+  gl: WebGLRenderingContext,
   width: number,
   height: number
 ) => {
-  ctx.clearColor(0.5, 0.5, 0.5, 0.8);
-  ctx.enable(ctx.DEPTH_TEST);
-  ctx.clear(ctx.COLOR_BUFFER_BIT);
-  ctx.viewport(0, 0, width, height);
+  gl.clearColor(0.5, 0.5, 0.5, 0.8);
+  gl.enable(gl.DEPTH_TEST);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.viewport(0, 0, width, height);
 };
 
-export const shadersInit = (ctx: WebGLRenderingContext) => {
-  const vertShader = ctx.createShader(ctx.VERTEX_SHADER);
+export const shadersInit = (gl: WebGLRenderingContext) => {
+  const vertShader = gl.createShader(gl.VERTEX_SHADER);
   if (vertShader === null) return null;
-  ctx.shaderSource(vertShader, vertexShader);
-  ctx.compileShader(vertShader);
+  gl.shaderSource(vertShader, vertexShader);
+  gl.compileShader(vertShader);
 
-  const fragShader = ctx.createShader(ctx.FRAGMENT_SHADER);
+  const fragShader = gl.createShader(gl.FRAGMENT_SHADER);
   if (fragShader === null) return null;
-  ctx.shaderSource(fragShader, fragmentShader);
-  ctx.compileShader(fragShader);
+  gl.shaderSource(fragShader, fragmentShader);
+  gl.compileShader(fragShader);
 
-  const shaderProgram = ctx.createProgram();
+  const shaderProgram = gl.createProgram();
   if (shaderProgram === null) return null;
-  ctx.attachShader(shaderProgram, vertShader);
-  ctx.attachShader(shaderProgram, fragShader);
-  ctx.linkProgram(shaderProgram);
-  ctx.useProgram(shaderProgram);
+  gl.attachShader(shaderProgram, vertShader);
+  gl.attachShader(shaderProgram, fragShader);
+  gl.linkProgram(shaderProgram);
+  gl.useProgram(shaderProgram);
 
   return shaderProgram;
 };

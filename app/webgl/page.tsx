@@ -1,42 +1,43 @@
 "use client";
 import { bgInit, shadersInit } from "@/app/webgl/_utils/defaultInit";
+import { polygonsMock } from "@/app/webgl/_utils/polygonsMock";
 import { useEffect, useRef, useState } from "react";
 
 export default function Webgl() {
   const canvasWrapper = useRef<HTMLDivElement>(null);
-  const glcanvas = useRef<HTMLCanvasElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
   const isCanvasLoaded = useRef<boolean>(false);
 
-  const [canvasSize, setCanvasSize] = useState<[number, number]>([1280, 600]);
+  const [canvasSize, setCanvasSize] = useState<[number, number]>([0, 0]);
 
   const renderCanvas = () => {
-    const canvas = glcanvas.current;
-    if (canvas === null) return;
-    const ctx = canvas.getContext("webgl");
-    if (ctx === null) {
+    if (canvas.current === null) return;
+    const gl = canvas.current.getContext("webgl");
+    if (gl === null) {
       alert("Seu dispositivo não suporta WebGL");
       return;
     }
-    bgInit(ctx, canvasSize[0], canvasSize[1]);
-    const shaderProgram = shadersInit(ctx);
+
+    bgInit(gl, canvasSize[0], canvasSize[1]);
+    const shaderProgram = shadersInit(gl);
     if (shaderProgram === null) return;
 
-    const polygons: Polygon[] = [
-      { vertices: [0, 0, -1, -1, 1, 0] },
-      { vertices: [0.5, 0, 1, -1, 1, 0] },
-    ];
+    for (let i = 0; i < polygonsMock.length; i++) {
+      const currPolygon = polygonsMock[i];
+      const spreadedVertices = currPolygon.vertices.flatMap((v) => v.position);
 
-    for (let i = 0; i < polygons.length; i++) {
-      ctx.bindBuffer(ctx.ARRAY_BUFFER, ctx.createBuffer());
-      ctx.bufferData(
-        ctx.ARRAY_BUFFER,
-        new Float32Array(polygons[i].vertices),
-        ctx.STATIC_DRAW
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array(spreadedVertices),
+        gl.STATIC_DRAW
       );
-      const coord = ctx.getAttribLocation(shaderProgram, "coordinates");
-      ctx.vertexAttribPointer(coord, 2, ctx.FLOAT, false, 0, 0);
-      ctx.enableVertexAttribArray(coord);
-      ctx.drawArrays(ctx.TRIANGLES, 0, 3);
+
+      const coord = gl.getAttribLocation(shaderProgram, "coordinates");
+      gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(coord);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
   };
 
@@ -50,8 +51,6 @@ export default function Webgl() {
         canvasWrapper.current.offsetHeight,
       ]);
     }
-
-    renderCanvas();
   }, []);
 
   useEffect(() => {
@@ -62,7 +61,7 @@ export default function Webgl() {
     <div>
       <div ref={canvasWrapper} className="h-screen w-full">
         <canvas
-          ref={glcanvas}
+          ref={canvas}
           width={canvasSize[0]}
           height={canvasSize[1]}
           style={{
