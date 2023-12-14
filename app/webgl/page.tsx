@@ -1,6 +1,6 @@
 "use client";
 import { bgInit, shadersInit } from "@/app/webgl/_utils/defaultInit";
-import { polygonsMock } from "@/app/webgl/_utils/polygonsMock";
+import { polygonsMock2d } from "@/app/webgl/_utils/polygonsMock";
 import { useEffect, useRef, useState } from "react";
 
 export default function Webgl() {
@@ -22,8 +22,8 @@ export default function Webgl() {
     const shaderProgram = shadersInit(gl);
     if (shaderProgram === null) return;
 
-    for (let i = 0; i < polygonsMock.length; i++) {
-      const currPolygon = polygonsMock[i];
+    for (let i = 0; i < polygonsMock2d.length; i++) {
+      const currPolygon = polygonsMock2d[i];
       const spreadedVertices = currPolygon.vertices.flatMap((v) => v.position);
       const spreadedColors = Array(currPolygon.vertices.length)
         .fill(currPolygon.color)
