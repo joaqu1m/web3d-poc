@@ -25,6 +25,17 @@ export default function Webgl() {
     for (let i = 0; i < polygonsMock.length; i++) {
       const currPolygon = polygonsMock[i];
       const spreadedVertices = currPolygon.vertices.flatMap((v) => v.position);
+      const spreadedColors = Array(currPolygon.vertices.length)
+        .fill(currPolygon.color)
+        .flat();
+
+      const colorBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array(spreadedColors),
+        gl.STATIC_DRAW
+      );
 
       const buffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -34,9 +45,18 @@ export default function Webgl() {
         gl.STATIC_DRAW
       );
 
-      const coord = gl.getAttribLocation(shaderProgram, "coordinates");
-      gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
-      gl.enableVertexAttribArray(coord);
+      const color = gl.getAttribLocation(shaderProgram, "color");
+      gl.vertexAttribPointer(color, 4, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(color);
+
+      const coordinates = gl.getAttribLocation(shaderProgram, "coordinates");
+      gl.vertexAttribPointer(coordinates, 2, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(coordinates);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+      gl.vertexAttribPointer(color, 4, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(color);
+
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
   };
