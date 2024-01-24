@@ -1,14 +1,14 @@
 "use client";
 import defaultInit from "@/app/webgl/_utils/defaultInit";
-import { polygonsMock3d } from "@/app/webgl/_utils/polygonsMock";
+import { polygonsMock2d } from "@/app/webgl/_utils/polygonsMock";
 import { useEffect, useRef, useState } from "react";
 
 export default function Webgl() {
   const canvasWrapper = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const isCanvasLoaded = useRef<boolean>(false);
-
-  const { bgInit, shadersInit } = defaultInit("3d");
+  
+  const { bgInit, shadersInit } = defaultInit("2d");
 
   const [canvasSize, setCanvasSize] = useState<[number, number]>([0, 0]);
 
@@ -24,8 +24,8 @@ export default function Webgl() {
     const shaderProgram = shadersInit(gl);
     if (shaderProgram === null) return;
 
-    for (let i = 0; i < polygonsMock3d.length; i++) {
-      const currPolygon = polygonsMock3d[i];
+    for (let i = 0; i < polygonsMock2d.length; i++) {
+      const currPolygon = polygonsMock2d[i];
       const spreadedVertices = currPolygon.vertices.flatMap((v) => v.position);
       const spreadedColors = Array(currPolygon.vertices.length)
         .fill(currPolygon.color)
@@ -52,14 +52,14 @@ export default function Webgl() {
       gl.enableVertexAttribArray(color);
 
       const coordinates = gl.getAttribLocation(shaderProgram, "coordinates");
-      gl.vertexAttribPointer(coordinates, 3, gl.FLOAT, false, 0, 0);
+      gl.vertexAttribPointer(coordinates, 2, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(coordinates);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
       gl.vertexAttribPointer(color, 4, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(color);
 
-      gl.drawArrays(gl.TRIANGLES, 0, currPolygon.vertices.length);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
   };
 
