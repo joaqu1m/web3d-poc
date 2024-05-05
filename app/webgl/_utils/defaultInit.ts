@@ -29,7 +29,6 @@ const shadersInit = (mode: Mode, gl: WebGLRenderingContext) => {
   gl.attachShader(shaderProgram, vertShader);
   gl.attachShader(shaderProgram, fragShader);
   gl.linkProgram(shaderProgram);
-  gl.useProgram(shaderProgram);
 
   return shaderProgram;
 };

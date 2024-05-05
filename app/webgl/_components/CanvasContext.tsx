@@ -8,7 +8,7 @@ export default function CanvasContext({
     canvasWrapper: {},
     canvas: {},
   },
-  classes = {
+  classNames = {
     canvasWrapper: "w-full h-full",
     canvas: "",
   },
@@ -18,30 +18,44 @@ export default function CanvasContext({
     canvasWrapper?: CSSProperties;
     canvas?: CSSProperties;
   };
-  classes?: {
+  classNames?: {
     canvasWrapper?: string;
     canvas?: string;
   };
 }) {
-  const canvasWrapper = useRef<HTMLDivElement>(null);
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const isCanvasLoaded = useRef<boolean>(false);
+  const canvasWrapperEl = useRef<HTMLDivElement>(null);
+  const canvasEl = useRef<HTMLCanvasElement>(null);
 
-  const { bgInit, shadersInit } = defaultInit("3d");
+  const ctxOpts = useRef<{
+    gl: WebGLRenderingContext | null;
+    shaderProgram: WebGLProgram | null;
+  }>({
+    gl: null,
+    shaderProgram: null,
+  });
 
   const [canvasSize, setCanvasSize] = useState<[number, number]>([0, 0]);
 
+  const { bgInit, shadersInit } = defaultInit("3d");
+
   const renderCanvas = () => {
-    if (canvas.current === null) return;
-    const gl = canvas.current.getContext("webgl");
-    if (gl === null) {
-      alert("Seu dispositivo não suporta WebGL");
-      return;
+    if (ctxOpts.current.gl === null) {
+      ctxOpts.current.gl = canvasEl.current?.getContext("webgl") ?? null;
+      if (ctxOpts.current.gl === null) return;
     }
 
+    const { gl } = ctxOpts.current;
+
     bgInit(gl, canvasSize[0], canvasSize[1]);
-    const shaderProgram = shadersInit(gl);
-    if (shaderProgram === null) return;
+
+    if (ctxOpts.current.shaderProgram === null) {
+      ctxOpts.current.shaderProgram = shadersInit(gl);
+      if (ctxOpts.current.shaderProgram === null) return;
+    }
+
+    const { shaderProgram } = ctxOpts.current;
+
+    gl.useProgram(shaderProgram);
 
     for (let i = 0; i < polygons.length; i++) {
       const currPolygon = polygons[i];
@@ -83,15 +97,19 @@ export default function CanvasContext({
   };
 
   useEffect(() => {
-    if (isCanvasLoaded.current) return;
-    isCanvasLoaded.current = true;
-
-    if (canvasWrapper.current !== null) {
+    const handleResize = () => {
+      if (canvasWrapperEl.current === null) return;
       setCanvasSize([
-        canvasWrapper.current.offsetWidth,
-        canvasWrapper.current.offsetHeight,
+        canvasWrapperEl.current.offsetWidth,
+        canvasWrapperEl.current.offsetHeight,
       ]);
-    }
+    };
+
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(canvasWrapperEl.current as Element);
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -100,19 +118,19 @@ export default function CanvasContext({
 
   return (
     <div
-      ref={canvasWrapper}
-      className={classes.canvasWrapper}
+      ref={canvasWrapperEl}
+      className={classNames.canvasWrapper}
       style={styles.canvasWrapper}
     >
       <canvas
-        ref={canvas}
+        ref={canvasEl}
         width={canvasSize[0]}
         height={canvasSize[1]}
-        className={classes.canvas}
+        className={classNames.canvas}
         style={{
-          ...styles.canvas,
           width: canvasSize[0],
           height: canvasSize[1],
+          ...styles.canvas,
         }}
       />
     </div>
