@@ -1,16 +1,19 @@
 import fragmentShader from "@/app/webgl/_shaders/fragmentShader.glsl";
 import vertexShader from "@/app/webgl/_shaders/vertexShader.glsl";
 
-let type: "2d" | "3d" | null = null;
-
-const bgInit = (gl: WebGLRenderingContext, width: number, height: number) => {
+const bgInit = (
+  mode: Mode,
+  gl: WebGLRenderingContext,
+  width: number,
+  height: number
+) => {
   gl.clearColor(0.5, 0.5, 0.5, 0.8);
   gl.enable(gl.DEPTH_TEST);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   gl.viewport(0, 0, width, height);
 };
 
-const shadersInit = (gl: WebGLRenderingContext) => {
+const shadersInit = (mode: Mode, gl: WebGLRenderingContext) => {
   const vertShader = gl.createShader(gl.VERTEX_SHADER);
   if (vertShader === null) return null;
   gl.shaderSource(vertShader, vertexShader);
@@ -31,11 +34,10 @@ const shadersInit = (gl: WebGLRenderingContext) => {
   return shaderProgram;
 };
 
-const init = (mode: "2d" | "3d") => {
-  type = mode;
+const init = (mode: Mode) => {
   return {
-    bgInit,
-    shadersInit,
+    bgInit: bgInit.bind(null, mode),
+    shadersInit: shadersInit.bind(null, mode),
   };
 };
 

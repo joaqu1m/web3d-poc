@@ -3,6 +3,8 @@ declare module "*.glsl" {
   export default content;
 }
 
+type Mode = "2d" | "3d";
+
 type Vertex2d = {
   position: [number, number];
 };
