@@ -3,22 +3,12 @@ declare module "*.glsl" {
   export default content;
 }
 
-type Mode = "2d" | "3d";
-
-type Vertex2d = {
-  position: [number, number];
-};
-
-type Polygon2d = {
-  vertices: [Vertex2d, Vertex2d, Vertex2d];
-  color: [number, number, number, number];
-};
-
-type Vertex3d = {
+type Vertex = {
+  // x, y, z
   position: [number, number, number];
 };
 
-type Polygon3d = {
-  vertices: [Vertex3d, Vertex3d, Vertex3d];
+type Polygon = {
+  vertices: [Vertex, Vertex, Vertex];
   color: [number, number, number, number];
 };

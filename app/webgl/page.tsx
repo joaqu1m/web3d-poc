@@ -1,6 +1,6 @@
 "use client";
-import CanvasContext from "@/app/webgl/_components/CanvasContext";
-import { polygonsMock3d } from "@/app/webgl/_utils/polygonsMock";
+import GraphicLoader from "@/app/webgl/_components/GraphicLoader";
+import { polygonsMock } from "@/app/webgl/_utils/polygonsMock";
 import { ChangeEvent, useState } from "react";
 
 export default function Webgl() {
@@ -8,8 +8,8 @@ export default function Webgl() {
 
   return (
     <main className="w-full" style={{ width }}>
-      <CanvasContext
-        polygons={polygonsMock3d}
+      <GraphicLoader
+        polygons={polygonsMock}
         classNames={{
           canvasWrapper: "w-full h-[300px] border-2 border-black",
         }}

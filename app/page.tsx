@@ -6,9 +6,6 @@ export default function Home() {
       <ul>
         <li>css3d</li>
         <li>
-          <Link href="/webgl/2d">Testes do WebGL em 2d</Link>
-        </li>
-        <li>
           <Link href="/webgl">WebGL</Link>
         </li>
         <li>ThreeJS</li>

@@ -2,7 +2,7 @@
 import defaultInit from "@/app/webgl/_utils/defaultInit";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 
-export default function CanvasContext({
+export default function GraphicLoader({
   polygons,
   styles = {
     canvasWrapper: {},
@@ -13,7 +13,7 @@ export default function CanvasContext({
     canvas: "",
   },
 }: {
-  polygons: Polygon3d[];
+  polygons: Polygon[];
   styles?: {
     canvasWrapper?: CSSProperties;
     canvas?: CSSProperties;
@@ -36,8 +36,6 @@ export default function CanvasContext({
 
   const [canvasSize, setCanvasSize] = useState<[number, number]>([0, 0]);
 
-  const { bgInit, shadersInit } = defaultInit("3d");
-
   const renderCanvas = () => {
     if (ctxOpts.current.gl === null) {
       ctxOpts.current.gl = canvasEl.current?.getContext("webgl") ?? null;
@@ -46,10 +44,12 @@ export default function CanvasContext({
 
     const { gl } = ctxOpts.current;
 
-    bgInit(gl, canvasSize[0], canvasSize[1]);
+    const { bgInit, shadersInit } = defaultInit(gl);
+
+    bgInit(canvasSize[0], canvasSize[1]);
 
     if (ctxOpts.current.shaderProgram === null) {
-      ctxOpts.current.shaderProgram = shadersInit(gl);
+      ctxOpts.current.shaderProgram = shadersInit();
       if (ctxOpts.current.shaderProgram === null) return;
     }
 
