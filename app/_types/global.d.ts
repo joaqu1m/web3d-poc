@@ -8,7 +8,7 @@ type Vertex = {
   position: [number, number, number];
 };
 
-type Polygon = {
+class Polygon {
   vertices: [Vertex, Vertex, Vertex];
   color: [number, number, number, number];
 };

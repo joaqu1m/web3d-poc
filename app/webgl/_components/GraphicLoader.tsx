@@ -25,7 +25,6 @@ export default function GraphicLoader({
 }) {
   const canvasWrapperEl = useRef<HTMLDivElement>(null);
   const canvasEl = useRef<HTMLCanvasElement>(null);
-
   const ctxOpts = useRef<{
     gl: WebGLRenderingContext | null;
     shaderProgram: WebGLProgram | null;
@@ -114,7 +113,7 @@ export default function GraphicLoader({
 
   useEffect(() => {
     renderCanvas();
-  }, [canvasSize]);
+  }, [canvasSize, polygons]);
 
   return (
     <div

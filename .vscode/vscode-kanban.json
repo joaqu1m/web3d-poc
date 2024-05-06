@@ -1,0 +1,72 @@
+{
+  "todo": [
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
+      "creation_time": "2024-05-06T00:10:22.107Z",
+      "id": "6",
+      "references": [],
+      "title": "Animation discovery"
+    },
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
+      "creation_time": "2024-05-06T00:09:44.619Z",
+      "id": "5",
+      "references": [],
+      "title": "Change to do not base scaling on HTML Element size"
+    },
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
+      "creation_time": "2024-05-06T00:08:22.605Z",
+      "id": "4",
+      "references": [],
+      "title": "Gradient discovery"
+    },
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
+      "creation_time": "2024-05-06T00:10:30.845Z",
+      "id": "7",
+      "references": [],
+      "title": "Shaders discovery"
+    },
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
+      "creation_time": "2024-05-06T00:05:27.520Z",
+      "id": "3",
+      "references": [],
+      "title": "Turn context with angular coords"
+    }
+  ],
+  "in-progress": [
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
+      "creation_time": "2024-05-06T00:04:47.294Z",
+      "id": "2",
+      "references": [],
+      "title": "Change Polygon type to class"
+    }
+  ],
+  "testing": [
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
+      "creation_time": "2024-05-06T00:00:00.435Z",
+      "id": "1",
+      "references": [],
+      "title": "Dynamic rerender ctx on polygon update"
+    }
+  ],
+  "done": []
+}
