@@ -55,6 +55,15 @@
       "id": "2",
       "references": [],
       "title": "Change Polygon type to class"
+    },
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
+      "creation_time": "2024-05-06T12:14:00.688Z",
+      "id": "8",
+      "references": [],
+      "title": "Controls update"
     }
   ],
   "testing": [

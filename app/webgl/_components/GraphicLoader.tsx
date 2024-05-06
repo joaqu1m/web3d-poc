@@ -112,7 +112,7 @@ export default function GraphicLoader({
   }, []);
 
   useEffect(() => {
-    renderCanvas();
+    requestAnimationFrame(renderCanvas);
   }, [canvasSize, polygons]);
 
   return (
