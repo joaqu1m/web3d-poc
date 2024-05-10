@@ -22,7 +22,10 @@ export default function Controls({
   };
 
   return polygons.map((polygon, i) => (
-    <div className="border-[1px] border-black flex p-[4px] justify-evenly">
+    <div
+      className="border-[1px] border-black flex p-[4px] justify-evenly"
+      key={i}
+    >
       <input type="text" className="angle-input" placeholder="X" />
       <input type="text" className="angle-input" placeholder="Y" />
       <input type="text" className="angle-input" placeholder="Z" />

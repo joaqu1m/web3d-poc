@@ -1,29 +1,45 @@
 "use client";
+import { useMouseMove } from "@/app/_hook/useMouseMove";
+import { useMouseUp } from "@/app/_hook/useMouseUp";
+import Controls from "@/app/webgl/_components/Controls";
 import GraphicLoader from "@/app/webgl/_components/GraphicLoader";
 import { polygonsMock } from "@/app/webgl/_utils/polygonsMock";
-import { ChangeEvent, useState } from "react";
-import Controls from "./_components/Controls";
+import { useState } from "react";
 
 export default function Webgl() {
-  const [width, setWidth] = useState("300px");
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [measures, setMeasures] = useState([300, 300]);
 
   const [polygons, setPolygons] = useState(polygonsMock);
 
+  useMouseMove((e) => {
+    if (isDragging) {
+      setMeasures((prev) => [prev[0] + e.movementX, prev[1] + e.movementY]);
+    }
+  });
+  useMouseUp(() => {
+    setIsDragging(false);
+  });
+
   return (
-    <main className="w-full" style={{ width }}>
-      <GraphicLoader
-        polygons={polygons}
-        classNames={{
-          canvasWrapper: "w-full h-[300px] border-2 border-black",
+    <main className="w-full">
+      <div
+        style={{
+          width: `${measures[0]}px`,
+          height: `${measures[1]}px`,
         }}
-      />
-      <input
-        type="text"
-        value={width}
-        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-          setWidth(event.target.value);
+        className="p-2 bg-[#1e2d57] cursor-move"
+        onMouseDown={(e) => {
+          e.target === e.currentTarget && setIsDragging(true);
         }}
-      />
+      >
+        <GraphicLoader
+          polygons={polygons}
+          classNames={{
+            canvasWrapper: "w-full h-full cursor-default",
+          }}
+        />
+      </div>
       <div className="p-[20px] gap-[20px] flex">
         <div className="bg-gray-500 grow flex flex-col">
           <Controls polygons={polygons} setPolygons={setPolygons} />
