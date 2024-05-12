@@ -51,6 +51,36 @@
       "assignedTo": {
         "name": "joaqu1m"
       },
+      "creation_time": "2024-05-06T12:14:00.688Z",
+      "id": "8",
+      "references": [],
+      "title": "Controls update"
+    },
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
+      "creation_time": "2024-05-11T16:29:23.789Z",
+      "id": "9",
+      "references": [],
+      "title": "Texturing and vertex individual coloring discovery"
+    },
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
+      "creation_time": "2024-05-11T17:09:22.476Z",
+      "id": "10",
+      "references": [],
+      "title": "Get fetch loading status poc"
+    }
+  ],
+  "testing": [],
+  "done": [
+    {
+      "assignedTo": {
+        "name": "joaqu1m"
+      },
       "creation_time": "2024-05-06T00:04:47.294Z",
       "id": "2",
       "references": [],
@@ -60,22 +90,10 @@
       "assignedTo": {
         "name": "joaqu1m"
       },
-      "creation_time": "2024-05-06T12:14:00.688Z",
-      "id": "8",
-      "references": [],
-      "title": "Controls update"
-    }
-  ],
-  "testing": [
-    {
-      "assignedTo": {
-        "name": "joaqu1m"
-      },
       "creation_time": "2024-05-06T00:00:00.435Z",
       "id": "1",
       "references": [],
       "title": "Dynamic rerender ctx on polygon update"
     }
-  ],
-  "done": []
+  ]
 }

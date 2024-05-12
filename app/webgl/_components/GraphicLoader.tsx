@@ -1,4 +1,4 @@
-"use client";
+import Polygon from "@/app/_models/Polygon";
 import defaultInit from "@/app/webgl/_utils/defaultInit";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 
@@ -58,9 +58,8 @@ export default function GraphicLoader({
 
     for (let i = 0; i < polygons.length; i++) {
       const currPolygon = polygons[i];
-      const spreadedVertices = currPolygon.vertices.flatMap((v) => v.position);
       const spreadedColors = Array(currPolygon.vertices.length)
-        .fill(currPolygon.color)
+        .fill(currPolygon.normalizedRgba)
         .flat();
 
       const colorBuffer = gl.createBuffer();
@@ -75,7 +74,7 @@ export default function GraphicLoader({
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
       gl.bufferData(
         gl.ARRAY_BUFFER,
-        new Float32Array(spreadedVertices),
+        new Float32Array(currPolygon.spreadedVertices),
         gl.STATIC_DRAW
       );
 
