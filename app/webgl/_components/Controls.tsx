@@ -1,4 +1,5 @@
 import Polygon from "@/app/_models/Polygon";
+import Vertex from "@/app/_models/Vertex";
 import { Dispatch, SetStateAction } from "react";
 
 export default function Controls({
@@ -8,41 +9,62 @@ export default function Controls({
   polygons: Polygon[];
   setPolygons: Dispatch<SetStateAction<Polygon[]>>;
 }) {
-  const rgbaToHex = (rgbaArray: number[]) => {
-    const [r, g, b] = rgbaArray.map((value: number) =>
-      Math.round(value * 255)
-        .toString(16)
-        .padStart(2, "0")
-    );
-    return `#${r}${g}${b}`;
-  };
-  const hexToRgba = (hex: string) => {
-    const bigint = parseInt(hex.substring(1), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return [r, g, b];
-  };
-
   return polygons.map((polygon, i) => (
     <div
       className="border-[1px] border-black flex p-[4px] justify-evenly"
       key={i}
     >
-      <input type="text" className="angle-input" placeholder="X" />
-      <input type="text" className="angle-input" placeholder="Y" />
-      <input type="text" className="angle-input" placeholder="Z" />
+      {polygon.vertices.map((vertex: Vertex, j: number) => (
+        <div key={j}>
+          <span>Vertex {j + 1}</span>
+          <input
+            type="text"
+            className="angle-input"
+            placeholder="X"
+            value={vertex.x}
+            onChange={(e) => {
+              setPolygons((prev: Polygon[]) => {
+                prev[i].vertices[j].x = parseFloat(e.target.value);
+                return [...prev];
+              });
+            }}
+          />
+          <input
+            type="text"
+            className="angle-input"
+            placeholder="Y"
+            value={vertex.y}
+            onChange={(e) => {
+              setPolygons((prev: Polygon[]) => {
+                prev[i].vertices[j].y = parseFloat(e.target.value);
+                return [...prev];
+              });
+            }}
+          />
+          <input
+            type="text"
+            className="angle-input"
+            placeholder="Z"
+            value={vertex.z}
+            onChange={(e) => {
+              setPolygons((prev: Polygon[]) => {
+                prev[i].vertices[j].z = parseFloat(e.target.value);
+                return [...prev];
+              });
+            }}
+          />
+        </div>
+      ))}
       {/* Provisory Color Selector */}
       <input
         type="color"
         className="angle-input"
-        value={rgbaToHex(polygon.normalizedRgba)}
+        value={polygon.hex}
         onChange={(e) => {
-          const _polygons = new Array(...polygons);
-          const [r, g, b] = hexToRgba(e.target.value);
-
-          _polygons[i].rgba = [r, g, b, _polygons[i].rgba[3]];
-          setPolygons(_polygons);
+          setPolygons((prev: Polygon[]) => {
+            prev[i].hex = e.target.value;
+            return [...prev];
+          });
         }}
       />
     </div>

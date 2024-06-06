@@ -37,19 +37,25 @@ export default function GraphicLoader({
 
   const renderCanvas = () => {
     if (ctxOpts.current.gl === null) {
-      ctxOpts.current.gl = canvasEl.current?.getContext("webgl") ?? null;
-      if (ctxOpts.current.gl === null) return;
+      const gl = canvasEl.current?.getContext("webgl") ?? null;
+      if (gl === null) return;
+      ctxOpts.current.gl = gl;
     }
 
     const { gl } = ctxOpts.current;
 
-    const { bgInit, shadersInit } = defaultInit(gl);
+    gl.enable(gl.DEPTH_TEST);
+    gl.clearDepth(1.0);
+    gl.depthFunc(gl.NOTEQUAL);
+
+    const { bgInit, shadersInit, initBuffers } = defaultInit(gl);
 
     bgInit(canvasSize[0], canvasSize[1]);
 
     if (ctxOpts.current.shaderProgram === null) {
-      ctxOpts.current.shaderProgram = shadersInit();
-      if (ctxOpts.current.shaderProgram === null) return;
+      const shaderProgram = shadersInit();
+      if (shaderProgram === null) return;
+      ctxOpts.current.shaderProgram = shaderProgram;
     }
 
     const { shaderProgram } = ctxOpts.current;
@@ -57,26 +63,9 @@ export default function GraphicLoader({
     gl.useProgram(shaderProgram);
 
     for (let i = 0; i < polygons.length; i++) {
-      const currPolygon = polygons[i];
-      const spreadedColors = Array(currPolygon.vertices.length)
-        .fill(currPolygon.normalizedRgba)
-        .flat();
+      const polygon = polygons[i];
 
-      const colorBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-      gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array(spreadedColors),
-        gl.STATIC_DRAW
-      );
-
-      const buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array(currPolygon.spreadedVertices),
-        gl.STATIC_DRAW
-      );
+      const { colorBuffer } = initBuffers(polygon);
 
       const color = gl.getAttribLocation(shaderProgram, "color");
       gl.vertexAttribPointer(color, 4, gl.FLOAT, false, 0, 0);
@@ -90,7 +79,9 @@ export default function GraphicLoader({
       gl.vertexAttribPointer(color, 4, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(color);
 
-      gl.drawArrays(gl.TRIANGLES, 0, currPolygon.vertices.length);
+      gl.clear(gl.DEPTH_BUFFER_BIT);
+
+      gl.drawArrays(gl.TRIANGLES, 0, polygon.vertices.length);
     }
   };
 

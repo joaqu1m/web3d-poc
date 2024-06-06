@@ -22,4 +22,9 @@ export const polygonsMock: Polygon[] = [
     ],
     [0, 0, 255, 1]
   ),
+  new Polygon([
+    new Vertex(1, 1, 0),
+    new Vertex(1, 0, 0),
+    new Vertex(0.5, 0.5, 0),
+  ]),
 ];
