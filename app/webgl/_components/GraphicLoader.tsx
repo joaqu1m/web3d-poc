@@ -9,7 +9,7 @@ export default function GraphicLoader({
     canvas: {},
   },
   classNames = {
-    canvasWrapper: "w-full h-full",
+    canvasWrapper: "",
     canvas: "",
   },
 }: {
@@ -108,7 +108,7 @@ export default function GraphicLoader({
   return (
     <div
       ref={canvasWrapperEl}
-      className={classNames.canvasWrapper}
+      className={"w-full h-full " + classNames.canvasWrapper}
       style={styles.canvasWrapper}
     >
       <canvas

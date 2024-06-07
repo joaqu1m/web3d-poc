@@ -9,64 +9,49 @@ export default function Controls({
   polygons: Polygon[];
   setPolygons: Dispatch<SetStateAction<Polygon[]>>;
 }) {
-  return polygons.map((polygon, i) => (
-    <div
-      className="border-[1px] border-black flex p-[4px] justify-evenly"
-      key={i}
-    >
-      {polygon.vertices.map((vertex: Vertex, j: number) => (
-        <div key={j}>
-          <span>Vertex {j + 1}</span>
+  return (
+    <div>
+      {polygons.map((polygon, i) => (
+        <div
+          className="border-[1px] border-black flex p-[4px] justify-evenly"
+          key={i}
+        >
+          {polygon.vertices.map((vertex: Vertex, j: number) => (
+            <div key={j}>
+              <span>Vertex {j + 1}</span>
+              {["x", "y", "z"].map((axis) => (
+                <input
+                  key={axis}
+                  type="number"
+                  step="0.1"
+                  className="angle-input"
+                  placeholder={axis.toUpperCase()}
+                  value={vertex[axis as "x" | "y" | "z"]}
+                  onChange={(e) => {
+                    setPolygons((prev: Polygon[]) => {
+                      prev[i].vertices[j][axis as "x" | "y" | "z"] = parseFloat(
+                        e.target.value
+                      );
+                      return [...prev];
+                    });
+                  }}
+                />
+              ))}
+            </div>
+          ))}
           <input
-            type="text"
+            type="color"
             className="angle-input"
-            placeholder="X"
-            value={vertex.x}
+            value={polygon.hex}
             onChange={(e) => {
               setPolygons((prev: Polygon[]) => {
-                prev[i].vertices[j].x = parseFloat(e.target.value);
-                return [...prev];
-              });
-            }}
-          />
-          <input
-            type="text"
-            className="angle-input"
-            placeholder="Y"
-            value={vertex.y}
-            onChange={(e) => {
-              setPolygons((prev: Polygon[]) => {
-                prev[i].vertices[j].y = parseFloat(e.target.value);
-                return [...prev];
-              });
-            }}
-          />
-          <input
-            type="text"
-            className="angle-input"
-            placeholder="Z"
-            value={vertex.z}
-            onChange={(e) => {
-              setPolygons((prev: Polygon[]) => {
-                prev[i].vertices[j].z = parseFloat(e.target.value);
+                prev[i].hex = e.target.value;
                 return [...prev];
               });
             }}
           />
         </div>
       ))}
-      {/* Provisory Color Selector */}
-      <input
-        type="color"
-        className="angle-input"
-        value={polygon.hex}
-        onChange={(e) => {
-          setPolygons((prev: Polygon[]) => {
-            prev[i].hex = e.target.value;
-            return [...prev];
-          });
-        }}
-      />
     </div>
-  ));
+  );
 }
