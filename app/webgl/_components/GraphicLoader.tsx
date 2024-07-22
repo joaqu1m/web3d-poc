@@ -1,6 +1,7 @@
 import Polygon from "@/app/_models/Polygon";
 import defaultInit from "@/app/webgl/_utils/defaultInit";
 import { CSSProperties, useEffect, useRef, useState } from "react";
+import { main } from "../_utils/writers";
 
 export default function GraphicLoader({
   polygons,
@@ -36,6 +37,8 @@ export default function GraphicLoader({
   const [canvasSize, setCanvasSize] = useState<[number, number]>([0, 0]);
 
   const renderCanvas = () => {
+    // main(canvasEl.current);
+    // return;
     if (ctxOpts.current.gl === null) {
       const gl = canvasEl.current?.getContext("webgl") ?? null;
       if (gl === null) return;
