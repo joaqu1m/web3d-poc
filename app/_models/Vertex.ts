@@ -32,4 +32,8 @@ export default class Vertex {
   set z(z: number) {
     this._z = z;
   }
+
+  get coords(): [number, number, number] {
+    return [this.x, this.y, this.z];
+  }
 }

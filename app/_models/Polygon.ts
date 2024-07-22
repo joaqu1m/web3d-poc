@@ -22,7 +22,7 @@ export default class Polygon {
   }
 
   get spreadedVertices() {
-    return this._vertices.flatMap((v) => [v.x, v.y, v.z]);
+    return this._vertices.flatMap((v) => v.coords);
   }
 
   get rgba() {

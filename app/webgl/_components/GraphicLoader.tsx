@@ -46,11 +46,11 @@ export default function GraphicLoader({
 
     gl.enable(gl.DEPTH_TEST);
     gl.clearDepth(1.0);
-    gl.depthFunc(gl.NOTEQUAL);
+    // gl.depthFunc(gl.LEQUAL); // Use LEQUAL para teste de profundidade padrão
 
     const { bgInit, shadersInit, initBuffers } = defaultInit(gl);
 
-    bgInit(canvasSize[0], canvasSize[1]);
+    bgInit(...canvasSize);
 
     if (ctxOpts.current.shaderProgram === null) {
       const shaderProgram = shadersInit();
@@ -86,15 +86,13 @@ export default function GraphicLoader({
   };
 
   useEffect(() => {
-    const handleResize = () => {
+    const resizeObserver = new ResizeObserver(() => {
       if (canvasWrapperEl.current === null) return;
       setCanvasSize([
         canvasWrapperEl.current.offsetWidth,
         canvasWrapperEl.current.offsetHeight,
       ]);
-    };
-
-    const resizeObserver = new ResizeObserver(handleResize);
+    });
     resizeObserver.observe(canvasWrapperEl.current as Element);
     return () => {
       resizeObserver.disconnect();

@@ -36,7 +36,7 @@ export default function Webgl() {
         <GraphicLoader
           polygons={polygons}
           classNames={{
-            canvasWrapper: "w-full h-full cursor-default",
+            canvasWrapper: "cursor-default",
           }}
         />
       </div>

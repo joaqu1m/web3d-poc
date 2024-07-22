@@ -1,3 +1,4 @@
+import { dimensions } from "@/app/_globals/constants";
 import Polygon from "@/app/_models/Polygon";
 import Vertex from "@/app/_models/Vertex";
 import { Dispatch, SetStateAction } from "react";
@@ -19,19 +20,17 @@ export default function Controls({
           {polygon.vertices.map((vertex: Vertex, j: number) => (
             <div key={j}>
               <span>Vertex {j + 1}</span>
-              {["x", "y", "z"].map((axis) => (
+              {dimensions.map((axis) => (
                 <input
                   key={axis}
                   type="number"
                   step="0.1"
                   className="angle-input"
                   placeholder={axis.toUpperCase()}
-                  value={vertex[axis as "x" | "y" | "z"]}
+                  value={vertex[axis]}
                   onChange={(e) => {
                     setPolygons((prev: Polygon[]) => {
-                      prev[i].vertices[j][axis as "x" | "y" | "z"] = parseFloat(
-                        e.target.value
-                      );
+                      prev[i].vertices[j][axis] = parseFloat(e.target.value);
                       return [...prev];
                     });
                   }}
